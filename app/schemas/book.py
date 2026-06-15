@@ -1,6 +1,7 @@
 from pydantic import BaseModel, Field, field_validator
 from typing import Optional
-from datetime import datetime, date
+from datetime import datetime
+from app.models.book import Genres
 
 class BookBase(BaseModel):
     title: str = Field(min_length=1, max_length=255)
@@ -9,7 +10,7 @@ class BookBase(BaseModel):
     price: float = Field(gt=0)
     quantity: int = Field(gt=0)
     isbn: str
-
+    genre: Genres
     @field_validator("title")
     @classmethod
     def validate_title(cls, v: Optional[str]) -> Optional[str]:

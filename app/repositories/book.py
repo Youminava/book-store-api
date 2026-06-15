@@ -1,6 +1,6 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.models.book import BookOrm
-from app.schemas.book import BookUpdate
+from app.schemas.book import BookUpdate, BookBase
 
 
 async def update_book(session: AsyncSession, 
@@ -25,4 +25,15 @@ async def find_book(session: AsyncSession,
     book = await session.get(BookOrm, book_id)
     if book is None:
         return None
+    return book
+
+async def create_book(session: AsyncSession,
+                      payload: BookBase
+) -> BookOrm | None:
+    book = BookOrm(**payload.model_dump())
+    if book is None:
+        return None
+    session.add(book)
+    await session.commit()
+    await session.refresh(book)
     return book

@@ -1,6 +1,6 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.models.author import AuthorOrm
-from app.schemas.author import AuthorUpdate
+from app.schemas.author import AuthorUpdate, AuthorBase
 
 async def find_author(session: AsyncSession,
                       author_id: str
@@ -24,4 +24,15 @@ async def update_author(session: AsyncSession,
 
     await session.commit()
     await session.refresh(author)                     
+    return author
+
+async def create_author(session: AsyncSession,
+                        payload: AuthorBase
+) -> AuthorOrm | None:
+    author = AuthorOrm(**payload.model_dump())
+    if author is None:
+        return None
+    session.add(author)
+    await session.commit()
+    await session.refresh(author)
     return author

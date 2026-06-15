@@ -1,4 +1,4 @@
-from pydantic import BaseModel, Field, field_validator
+from pydantic import BaseModel, Field
 from datetime import date
 
 class AuthorBase(BaseModel):
@@ -8,7 +8,6 @@ class AuthorBase(BaseModel):
     bio: str | None = Field(default=None, max_length=300)
     birth_date: date
     death_date: date | None = Field(default=None)
-    books: list
 
 class AuthorUpdate(AuthorBase):
     name: str | None = Field(default=None)
